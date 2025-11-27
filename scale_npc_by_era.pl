@@ -130,91 +130,291 @@ my %ERA_ZONES = (
 #    atk     = ATK + accuracy
 #    resist  = MR/FR/CR/DR/PR/Corruption
 #    spell   = spellscale / healscale
+#    mana    = max_mana
+#
+# Each era now has:
+#   trash => !$npc->IsRaidTarget() && !$npc->IsRareSpawn()
+#   named =>  $npc->IsRareSpawn()
+#   raid  =>  $npc->IsRaidTarget()
 my %ERA_SCALE = (
     classic => {
-        hp      => 0.40,
-        melee   => 0.40,
-        defense => 0.50,
-        atk     => 0.35,
-        resist  => 0.50,
-        spell   => 0.50,
+        trash => {
+            hp      => 0.40,
+            melee   => 0.40,
+            defense => 0.50,
+            atk     => 0.35,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        named => {
+            hp      => 0.40,
+            melee   => 0.40,
+            defense => 0.50,
+            atk     => 0.35,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        raid  => {
+            hp      => 0.40,
+            melee   => 0.40,
+            defense => 0.50,
+            atk     => 0.35,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
     },
-    kunark  => {
-        hp      => 0.55,
-        melee   => 0.55,
-        defense => 0.65,
-        atk     => 0.55,
-        resist  => 0.60,
-        spell   => 0.65,
+
+    kunark => {
+        trash => {
+            hp      => 0.55,
+            melee   => 0.55,
+            defense => 0.65,
+            atk     => 0.55,
+            resist  => 0.60,
+            spell   => 0.65,
+            mana    => 1.00,
+        },
+        named => {
+            hp      => 0.55,
+            melee   => 0.55,
+            defense => 0.65,
+            atk     => 0.55,
+            resist  => 0.60,
+            spell   => 0.65,
+            mana    => 1.00,
+        },
+        raid  => {
+            hp      => 0.55,
+            melee   => 0.55,
+            defense => 0.65,
+            atk     => 0.55,
+            resist  => 0.60,
+            spell   => 0.65,
+            mana    => 1.00,
+        },
     },
+
     velious => {
-        hp      => 0.70,
-        melee   => 0.70,
-        defense => 0.80,
-        atk     => 0.70,
-        resist  => 0.75,
-        spell   => 0.80,
+        trash => {
+            hp      => 0.70,
+            melee   => 0.70,
+            defense => 0.80,
+            atk     => 0.70,
+            resist  => 0.75,
+            spell   => 0.80,
+            mana    => 1.00,
+        },
+        named => {
+            hp      => 0.70,
+            melee   => 0.70,
+            defense => 0.80,
+            atk     => 0.70,
+            resist  => 0.75,
+            spell   => 0.80,
+            mana    => 1.00,
+        },
+        raid  => {
+            hp      => 0.70,
+            melee   => 0.70,
+            defense => 0.80,
+            atk     => 0.70,
+            resist  => 0.75,
+            spell   => 0.80,
+            mana    => 1.00,
+        },
     },
-    luclin  => {
-        hp      => 0.85,
-        melee   => 0.85,
-        defense => 0.90,
-        atk     => 0.85,
-        resist  => 0.90,
-        spell   => 0.95,
+
+    luclin => {
+        trash => {
+            hp      => 0.85,
+            melee   => 0.85,
+            defense => 0.90,
+            atk     => 0.85,
+            resist  => 0.90,
+            spell   => 0.95,
+            mana    => 1.00,
+        },
+        named => {
+            hp      => 0.85,
+            melee   => 0.85,
+            defense => 0.90,
+            atk     => 0.85,
+            resist  => 0.90,
+            spell   => 0.95,
+            mana    => 1.00,
+        },
+        raid  => {
+            hp      => 0.85,
+            melee   => 0.85,
+            defense => 0.90,
+            atk     => 0.85,
+            resist  => 0.90,
+            spell   => 0.95,
+            mana    => 1.00,
+        },
     },
-    pop     => {
-        hp      => 0.50,
-        melee   => 0.50,
-        defense => 0.50,
-        atk     => 0.50, 
-        resist  => 0.50,
-        spell   => 0.50,
+
+    pop => {
+        trash => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        named => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        raid  => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
     },
-    loy     => {
-        hp      => 0.50,
-        melee   => 0.50,
-        defense => 0.50,
-        atk     => 0.50, 
-        resist  => 0.50,
-        spell   => 0.50,
+
+    loy => {
+        trash => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        named => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        raid  => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
     },
-    ldon    => {
-        hp      => 0.50,
-        melee   => 0.50,
-        defense => 0.50,
-        atk     => 0.50, 
-        resist  => 0.50,
-        spell   => 0.50,
+
+    ldon => {
+        trash => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        named => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        raid  => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
     },
-    god     => {
-        hp      => 0.50,
-        melee   => 0.50,
-        defense => 0.50,
-        atk     => 0.50, 
-        resist  => 0.50,
-        spell   => 0.50,
+
+    god => {
+        trash => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        named => {
+            hp      => 1.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        raid  => {
+            hp      => 3.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
     },
-    oow     => {
-        hp      => 0.50,
-        melee   => 0.50,
-        defense => 0.50,
-        atk     => 0.50, 
-        resist  => 0.50,
-        spell   => 0.50,
+
+    oow => {
+        trash => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        named => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        raid  => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
     },
 );
 
 # ---------------- NPC BLACKLIST ----------------
 # NPC type IDs that should NEVER be scaled.
-# Example: training dummy, bosses, banker-like utility NPCs.
-
 my %ERA_BLACKLIST_NPCID = (
-    282020 => 1,   # Training Dummy
-    # 90001 => 1,   # Custom boss example
+    # 282020 => 1,   # Training Dummy example
+    # 90001 => 1,
     # 90002 => 1,
 );
-
 
 # Fallback if zone/era not mapped
 my %DEFAULT_SCALE = (
@@ -224,6 +424,7 @@ my %DEFAULT_SCALE = (
     atk     => 1.00,
     resist  => 1.00,
     spell   => 1.00,
+    mana    => 1.00,
 );
 
 # Flat map zone_short -> era (lazy-init)
@@ -239,9 +440,16 @@ sub _era_build_zone_map {
         }
     }
     $ERA_SCALE_INITED = 1;
-    if ($ERA_SCALE_DEBUG) {
-        quest::debug("[EraScale] Built ZONE_ERA map with " . scalar(keys %ZONE_ERA) . " entries");
-    }
+    quest::debug("[EraScale] Built ZONE_ERA map with " . scalar(keys %ZONE_ERA) . " entries")
+        if $ERA_SCALE_DEBUG;
+}
+
+# -------- role classifier: trash / named / raid ----------
+sub _era_classify_role {
+    my ($npc) = @_;
+    return 'raid'  if $npc->IsRaidTarget();
+    return 'named' if $npc->IsRareSpawn();
+    return 'trash';
 }
 
 # ==========================================================
@@ -260,30 +468,42 @@ sub plugin::scale_npc_by_era {
 
     my $zonesn = lc($zone // '');
 
-    my $era;
-    if (exists $ZONE_ERA{$zonesn}) {
-        $era = $ZONE_ERA{$zonesn};
-    } else {
-        $era = 'default';
-    }
+    my $era = exists $ZONE_ERA{$zonesn} ? $ZONE_ERA{$zonesn} : 'default';
 
-    my $prof = $era eq 'default'
-        ? \%DEFAULT_SCALE
-        : $ERA_SCALE{$era} || \%DEFAULT_SCALE;
+    my $role = _era_classify_role($npc);
+
+    my $prof;
+    if ($era eq 'default') {
+        $prof = \%DEFAULT_SCALE;
+    } else {
+        my $era_cfg = $ERA_SCALE{$era};
+        if (ref($era_cfg) eq 'HASH' && (exists $era_cfg->{trash} || exists $era_cfg->{named} || exists $era_cfg->{raid})) {
+            # per-role config
+            $prof = $era_cfg->{$role}
+                 || $era_cfg->{trash}
+                 || \%DEFAULT_SCALE;
+        } else {
+            # backwards-compatible flat era config
+            $prof = $era_cfg || \%DEFAULT_SCALE;
+        }
+    }
 
     if ($ERA_SCALE_DEBUG) {
         quest::debug(
             sprintf(
-                "[EraScale] map lookup: zone=%s -> era=%s (hp=%.2f melee=%.2f def=%.2f atk=%.2f resist=%.2f spell=%.2f)",
+                "[EraScale] map lookup: zone=%s -> era=%s role=%s (hp=%.2f melee=%.2f def=%.2f atk=%.2f resist=%.2f spell=%.2f mana=%.2f)",
                 $zonesn,
                 $era,
-                $prof->{hp}, $prof->{melee}, $prof->{defense},
-                $prof->{atk}, $prof->{resist}, $prof->{spell},
+                $role,
+                $prof->{hp},      $prof->{melee},
+                $prof->{defense}, $prof->{atk},
+                $prof->{resist},  $prof->{spell},
+                $prof->{mana} // 1.00,
             )
         );
     }
 
-    _era_apply_scale_profile($npc, $zonesn, $era, $prof);
+    _era_apply_scale_profile($npc, $zonesn, $era, $role, $prof);
 }
 
 # ----------------------------------------------------------
@@ -307,19 +527,16 @@ sub _era_should_scale_npc {
 
     # --- BLACKLIST LOGIC ---
     my $npc_id = $npc->GetNPCTypeID() || 0;
-    if ($ERA_BLACKLIST_NPCID{$npc_id}) {
-        return 0;
-    }
+    return 0 if $ERA_BLACKLIST_NPCID{$npc_id};
 
     return 1;
 }
-
 
 # ----------------------------------------------------------
 # INTERNAL: apply scale profile (full knobs)
 # ----------------------------------------------------------
 sub _era_apply_scale_profile {
-    my ($npc, $zone, $era, $prof) = @_;
+    my ($npc, $zone, $era, $role, $prof) = @_;
 
     my $hp_mult     = $prof->{hp}      // 1.0;
     my $melee_mult  = $prof->{melee}   // 1.0;
@@ -327,38 +544,42 @@ sub _era_apply_scale_profile {
     my $atk_mult    = $prof->{atk}     // $melee_mult;
     my $resist_mult = $prof->{resist}  // $prof->{spell} // 1.0;
     my $spell_mult  = $prof->{spell}   // 1.0;
+    my $mana_mult   = $prof->{mana}    // 1.0;
 
     # -------- Base combat stats --------
-    my $orig_hp   = $npc->GetMaxHP();
-    my $orig_min  = $npc->GetMinDMG();
-    my $orig_max  = $npc->GetMaxDMG();
-    my $orig_ac   = $npc->GetAC();
-    my $orig_atk  = $npc->GetATK();
-    my $orig_acc  = $npc->GetAccuracyRating();
+    my $orig_hp    = $npc->GetMaxHP();
+    my $orig_min   = $npc->GetMinDMG();
+    my $orig_max   = $npc->GetMaxDMG();
+    my $orig_ac    = $npc->GetAC();
+    my $orig_atk   = $npc->GetATK();
+    my $orig_acc   = $npc->GetAccuracyRating();
+    my $orig_mana  = $npc->GetMaxMana();
 
     # -------- Resists --------
-    my $orig_mr   = $npc->GetMR();
-    my $orig_fr   = $npc->GetFR();
-    my $orig_cr   = $npc->GetCR();
-    my $orig_dr   = $npc->GetDR();
-    my $orig_pr   = $npc->GetPR();
-    my $orig_cor  = $npc->GetCorruption();
+    my $orig_mr    = $npc->GetMR();
+    my $orig_fr    = $npc->GetFR();
+    my $orig_cr    = $npc->GetCR();
+    my $orig_dr    = $npc->GetDR();
+    my $orig_pr    = $npc->GetPR();
+    my $orig_cor   = $npc->GetCorruption();
 
     # -------- New values (scaled) --------
-    my $new_hp    = int($orig_hp  * $hp_mult);
-    my $new_min   = int($orig_min * $melee_mult);
-    my $new_max   = int($orig_max * $melee_mult);
+    my $new_hp     = int($orig_hp   * $hp_mult);
+    my $new_min    = int($orig_min  * $melee_mult);
+    my $new_max    = int($orig_max  * $melee_mult);
 
-    my $new_ac    = int($orig_ac  * $def_mult);
-    my $new_atk   = int($orig_atk * $atk_mult);
-    my $new_acc   = int($orig_acc * $atk_mult);
+    my $new_ac     = int($orig_ac   * $def_mult);
+    my $new_atk    = int($orig_atk  * $atk_mult);
+    my $new_acc    = int($orig_acc  * $atk_mult);
 
-    my $new_mr    = int($orig_mr  * $resist_mult);
-    my $new_fr    = int($orig_fr  * $resist_mult);
-    my $new_cr    = int($orig_cr  * $resist_mult);
-    my $new_dr    = int($orig_dr  * $resist_mult);
-    my $new_pr    = int($orig_pr  * $resist_mult);
-    my $new_cor   = int($orig_cor * $resist_mult);
+    my $new_mr     = int($orig_mr   * $resist_mult);
+    my $new_fr     = int($orig_fr   * $resist_mult);
+    my $new_cr     = int($orig_cr   * $resist_mult);
+    my $new_dr     = int($orig_dr   * $resist_mult);
+    my $new_pr     = int($orig_pr   * $resist_mult);
+    my $new_cor    = int($orig_cor  * $resist_mult);
+
+    my $new_mana   = int($orig_mana * $mana_mult);
 
     # -------- Safety clamps --------
     $new_hp  = 1 if $new_hp < 1 && $orig_hp > 0;
@@ -370,50 +591,55 @@ sub _era_apply_scale_profile {
         $new_max = $new_min;
     }
 
-    $new_ac  = 0 if $new_ac  < 0;
-    $new_atk = 0 if $new_atk < 0;
-    $new_acc = 0 if $new_acc < 0;
+    $new_ac   = 0 if $new_ac   < 0;
+    $new_atk  = 0 if $new_atk  < 0;
+    $new_acc  = 0 if $new_acc  < 0;
 
-    $new_mr  = 0 if $new_mr  < 0;
-    $new_fr  = 0 if $new_fr  < 0;
-    $new_cr  = 0 if $new_cr  < 0;
-    $new_dr  = 0 if $new_dr  < 0;
-    $new_pr  = 0 if $new_pr  < 0;
-    $new_cor = 0 if $new_cor < 0;
+    $new_mr   = 0 if $new_mr   < 0;
+    $new_fr   = 0 if $new_fr   < 0;
+    $new_cr   = 0 if $new_cr   < 0;
+    $new_dr   = 0 if $new_dr   < 0;
+    $new_pr   = 0 if $new_pr   < 0;
+    $new_cor  = 0 if $new_cor  < 0;
+
+    $new_mana = 0 if $new_mana < 0;
 
     # -------- Apply stat changes --------
-    $npc->ModifyNPCStat("max_hp",  $new_hp);
-    $npc->ModifyNPCStat("min_hit", $new_min);
-    $npc->ModifyNPCStat("max_hit", $new_max);
+    $npc->ModifyNPCStat("max_hp",   $new_hp);
+    $npc->ModifyNPCStat("min_hit",  $new_min);
+    $npc->ModifyNPCStat("max_hit",  $new_max);
 
     $npc->ModifyNPCStat("ac",       $new_ac);
     $npc->ModifyNPCStat("atk",      $new_atk);
     $npc->ModifyNPCStat("accuracy", $new_acc);
 
-    $npc->ModifyNPCStat("mr",      $new_mr);
-    $npc->ModifyNPCStat("fr",      $new_fr);
-    $npc->ModifyNPCStat("cr",      $new_cr);
-    $npc->ModifyNPCStat("dr",      $new_dr);
-    $npc->ModifyNPCStat("pr",      $new_pr);
-    $npc->ModifyNPCStat("cor",  $new_cor);
+    $npc->ModifyNPCStat("mr",       $new_mr);
+    $npc->ModifyNPCStat("fr",       $new_fr);
+    $npc->ModifyNPCStat("cr",       $new_cr);
+    $npc->ModifyNPCStat("dr",       $new_dr);
+    $npc->ModifyNPCStat("pr",       $new_pr);
+    $npc->ModifyNPCStat("cor",      $new_cor);
+
+    $npc->ModifyNPCStat("max_mana", $new_mana);
 
     my $spellscale = int($spell_mult * 100);
     $npc->ModifyNPCStat("spellscale", $spellscale);
     $npc->ModifyNPCStat("healscale",  $spellscale);
 
-    $npc->Heal();
+    $npc->Heal();  # refill HP to new max
+    # (mana will also be clamped inside ModifyNPCStat for max_mana)
 
     if ($ERA_SCALE_DEBUG) {
         quest::debug(
             sprintf(
-                "[EraScale] zone=%s era=%s ".
+                "[EraScale] zone=%s era=%s role=%s ".
                 "hp %.0f->%.0f (x%.2f) ".
                 "min %.0f->%.0f (x%.2f) max %.0f->%.0f (x%.2f) ".
                 "ac %.0f->%.0f (x%.2f) atk %.0f->%.0f (x%.2f) ".
                 "mr %.0f->%.0f fr %.0f->%.0f cr %.0f->%.0f ".
                 "dr %.0f->%.0f pr %.0f->%.0f cor %.0f->%.0f (resist x%.2f) ".
-                "spell x%.2f",
-                $zone, $era,
+                "mana %.0f->%.0f (x%.2f) spell x%.2f",
+                $zone, $era, $role,
                 $orig_hp,  $new_hp,  $hp_mult,
                 $orig_min, $new_min, $melee_mult,
                 $orig_max, $new_max, $melee_mult,
@@ -425,6 +651,7 @@ sub _era_apply_scale_profile {
                 $orig_dr,  $new_dr,
                 $orig_pr,  $new_pr,
                 $orig_cor, $new_cor, $resist_mult,
+                $orig_mana, $new_mana, $mana_mult,
                 $spell_mult,
             )
         );
