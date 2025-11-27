@@ -25,7 +25,7 @@ Place the plugin file here:
 quests/plugins/scale_npc_by_era.pl
 
 
-Then add this to your global NPC script:
+# There are TWO DIFFERENT methods. One using global_npc.pl the other using zonecontroller.pl. Use ONE NOT BOTH.
 
 **`quests/global/global_npc.pl`**
 
@@ -36,18 +36,72 @@ sub EVENT_SPAWN {
 ```
 That's all you need for the plugin to begin scaling NPCs by zone era.
 
+**`quests/global/zone_controller.pl`**
+
+```perl
+
+our $ZC_ERA_DEBUG = 0; # zone-controller level debug (separate from plugin’s)
+
+sub EVENT_SPAWN_ZONE {
+    # This fires for EVERY NPC spawn in the zone
+
+    # $spawned_entity_id and $spawned_npc_id are set by the engine
+    my $ent_id = $spawned_entity_id;
+    my $npc_id = $spawned_npc_id;
+
+    my $mob = $entity_list->GetMobID($ent_id);
+    return if !$mob;
+    return if !$mob->IsNPC();          # safety
+
+    my $npc = $mob->CastToNPC();
+
+    # Let the plugin handle era, trash/named/raid, blacklist, etc.
+    plugin::scale_npc_by_era($npc, $zonesn);
+
+    if ($ZC_ERA_DEBUG) {
+        quest::debug(
+            sprintf(
+                "[EraScale-ZC] EVENT_SPAWN_ZONE: scaled npc_type_id=%d ent_id=%d in %s",
+                $npc_id, $ent_id, $zonesn
+            )
+        );
+    }
+}
+```
+
 ## 🎛️ Adjusting Difficulty
 
 Inside scale_npc_by_era.pl, each era has a configuration block:
 ```perl
 classic => {
-    hp      => 0.40,
-    melee   => 0.40,
-    defense => 0.50,
-    atk     => 0.35,
-    resist  => 0.50,
-    spell   => 0.50,
-},
+        trash => {
+            hp      => 0.40,
+            melee   => 0.40,
+            defense => 0.50,
+            atk     => 0.35,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        named => {
+            hp      => 0.40,
+            melee   => 0.40,
+            defense => 0.50,
+            atk     => 0.35,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        raid  => {
+            hp      => 0.40,
+            melee   => 0.40,
+            defense => 0.50,
+            atk     => 0.35,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+    },
 ```
 
 Where:
