@@ -154,6 +154,15 @@ my %ERA_ROLE_FILTER = (
 );
 ```
 
+## 🚫 Version Filter
+
+```perl
+our %ERA_GLOBAL_VERSION_BLACKLIST = (
+    # version => 1
+    # 1 => 1,    # example: skip ALL version 1 zones (custom zones, AoC instances, LDoN, etc)
+);
+```
+
 ## 🛠️ Debugging (Optional)
 
 Enable debug output at the top of the plugin:
