@@ -123,6 +123,36 @@ my %ERA_BLACKLIST_NPCID = (
 ```
 
 Any NPCTypeID listed will spawn unscaled.
+## 🚫 ZONE VERSION BLACKLIST
+
+If there is a zone that should not be affected (e.g. permafrost version x), add the zonesn and version here:
+```perl
+#   poknowledge => { 1 => 1 }  # don't touch version 1 of PoK 
+my %ERA_BLACKLIST_ZONEVER = (
+    # poknowledge => { 1 => 1 },
+    # hateplane   => { 1 => 1 },
+);
+```
+## 🚫 Role filter
+
+Changes how roles are scaled
+```perl
+#   classic => { trash => 1, named => 1, raid => 0 },   # no Classic raids touched
+#   god     => { trash => 0, named => 1, raid => 1 },   # only named+raids in GoD
+my %ERA_ROLE_FILTER = (
+    default => { trash => 1, named => 1, raid => 1 },
+
+    # classic => { trash => 1, named => 1, raid => 0 },
+    # kunark  => { trash => 1, named => 1, raid => 1 },
+    # velious => { trash => 1, named => 1, raid => 1 },
+    # luclin  => { trash => 1, named => 1, raid => 1 },
+    # pop     => { trash => 1, named => 1, raid => 1 },
+    # loy     => { trash => 1, named => 1, raid => 1 },
+    # ldon    => { trash => 1, named => 1, raid => 1 },
+    # god     => { trash => 1, named => 1, raid => 1 },
+    # oow     => { trash => 1, named => 1, raid => 1 },
+);
+```
 
 ## 🛠️ Debugging (Optional)
 
