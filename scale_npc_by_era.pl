@@ -1,137 +1,126 @@
 # quests/plugins/scale_npc_by_era.pl
 # ==========================================================
-# plugin::scale_npc_by_era([$npc, $zonesn])
+# plugin::scale_npc_by_era([$npc, $zonesn, $zone_version])
 #
 # - Globally scales NPCs down or up by "era" with NO DB changes.
 # - Era is determined by zone short name.
 # - Can be called from any EVENT_SPAWN:
 #       plugin::scale_npc_by_era();
+#
+#   Optional args:
+#       plugin::scale_npc_by_era($npc);
+#       plugin::scale_npc_by_era($npc, $zonesn);
+#       plugin::scale_npc_by_era($npc, $zonesn, $zone_version);
 # ==========================================================
 
+package plugin;
+
 # Toggle for chatty debug
-our $ERA_SCALE_DEBUG //= 1; 
+our $ERA_SCALE_DEBUG //= 0;
 
 # ---------------- ERA CONFIG ----------------
 # 1) Zones by era. Edit these lists for your server.
 my %ERA_ZONES = (
     classic => [ qw(
-        airplane		akanon			befallen		beholder
-		butcher			cauldron		commonlands		blackburrow
-		commons			crushbone		eastkarana		ecommons
-		erudnext		erudnint		erudsxing		everfrost
-		fearplane		feerrott		feerrott2		felwithea
-		felwitheb		freeporteast	freeportwest	freporte
-		freportn		freportw		gfaydark		grobb
-		gukbottom		guktop			halas			highkeep
-		highpass		highpasshold	toxxulia		innothule
-		innothuleb		kaladima		kaladimb		kedge
-		kithicor		lakerathe		lavastorm		lfaydark
-		mistmoore		misty			mistythicket	najena
-		nektulos		neriaka			neriakb			neriakc
-		northkarana		northro			nro				oasis
-		oceanoftears	oggok			oot				paineel
-		befallen		permafrost		qcat			qey2hh1
-		qeynos			qeynos2			qeytoqrg		qrg
-		rathemtn		rivervale		runnyeye		soldunga
-		soldungb		soldungc		soltemple		southkarana
-		southro			sro				steamfont		steamfontmts
-		befallenb		tox						
-								
-		
-		
+        airplane        akanon          befallenb       beholder
+        butcher         cauldron        commonlands     blackburrow
+        commons         crushbone       eastkarana      ecommons
+        erudnext        erudnint        erudsxing       everfrost
+        steamfontmts    feerrott        feerrott2       felwithea
+        felwitheb       freeporteast    freeportwest    freporte
+        freportn        freportw        gfaydark        grobb
+        gukbottom       guktop          halas           highkeep
+        highpass        highpasshold    toxxulia        innothule
+        innothuleb      kaladima        kaladimb        kedge
+        kithicor        lakerathe       lavastorm       lfaydark
+        mistmoore       misty           mistythicket    najena
+        nektulos        neriaka         neriakb         neriakc
+        northkarana     northro         nro             oasis
+        oceanoftears    oggok           oot             paineel
+        befallen        permafrost      qcat            qey2hh1
+        qeynos          qeynos2         qeytoqrg        qrg
+        rathemtn        rivervale       runnyeye        soldunga
+        soldungb        tox		        soltemple       southkarana
+        southro         sro             steamfont       
+        
     ) ],
 
     kunark => [ qw(
-		burningwood		cabeast			cabwest			chardok
-		citymist		dalnir			dreadlands		firiona
-		frontiermtns	charasis		kaesora			karnor
-		kurn			lakeofillomen	warslikswood	sebilis
-		hole			skyfire			swampofnohope	veeshan
-		emeraldjungle	fieldofbone		overthere		timorous
-		trakanon							
-        
-
+        burningwood     cabeast         cabwest         chardok
+        citymist        dalnir          dreadlands      firiona
+        frontiermtns    charasis        kaesora         karnor
+        kurn            lakeofillomen   warslikswood    sebilis
+        hole            skyfire         swampofnohope   veeshan
+        emeraldjungle   fieldofbone     overthere       timorous
+        trakanon
     ) ],
 
     velious => [ qw(
-        cobaltscar		crystal			necropolis		eastwastes
-		greatdivide		iceclad			icewell			kael
-		sleep			fearplane		growthplane		wakening
-		velketor		siren			skyshrine		stonebrunt
-		templeveeshan	warrens			westwastes		thurgadina
-		thurgadinb		frozenshadow			
-		
+        cobaltscar      crystal         necropolis      eastwastes
+        greatdivide     iceclad         icewell         kael
+        sleep           fearplane       growthplane     wakening
+        velketor        siren           skyshrine       stonebrunt
+        templeveeshan   warrens         westwastes      thurgadina
+        thurgadinb      frozenshadow
     ) ],
 
     luclin => [ qw(
-        acrylia			akheva			dawnshroud		echo
-		griegsend		grimling		hollowshade		jaggedpine
-		katta			mseru			letalis			netherbian
-		paludal			sseru			scarlet			shadeweaver
-		shadowhaven		sharvahl		ssratemple		tenebrous
-		bazaar			thedeep			fungusgrove		thegrey
-		maiden			nexus			twilight		umbral
-		vexthal
-		
+        acrylia         akheva          dawnshroud      echo
+        griegsend       grimling        hollowshade     jaggedpine
+        katta           mseru           letalis         netherbian
+        paludal         sseru           scarlet         shadeweaver
+        shadowhaven     sharvahl        ssratemple      tenebrous
+        bazaar          thedeep         fungusgrove     thegrey
+        maiden          nexus           twilight        umbral
+        vexthal
     ) ],
 
     pop => [ qw(
-        pofire			potactics		poair			hohonora
-		hohonorb		ponightmare		nightmareb		podisease
-		poinnovation	pojustice		postorms		potimea
-		potimeb			potorment		potranquility	povalor
-		poeartha		poearthb		powater			codecay
-		solrotower		poknowledge		bothunder		
-		
+        pofire          potactics       poair           hohonora
+        hohonorb        ponightmare     nightmareb      podisease
+        poinnovation    poj             postorms        potimea
+        potimeb         potorment       potranquility   povalor
+        poeartha        poearthb        powater         codecay
+        solrotower      poknowledge     bothunder
     ) ],
-	
-	loy => [ qw(
-		soldungc		cazicthule		dulak			gunthak
-		chardokb		hatesfury		nurga			hateplaneb
-		droga			nadox			torgiran		veksar
-		
-	) ],
-	
-	ldon => [ qw(
-		guka           	gukb           	gukc           	gukd
-		guke		   	gukf			gukg			gukh
-		mmca		  	mmcb			mmcc			mmcd
-		mmce		  	mmcf			mmcg			mmch
-		mmci	  	  	mmcj			ruja			rujb
-		rujc		  	rujd			rujc			rujd
-		ruje		  	rujf			rujg			rujh
-		ruji		 	rujj			mira			mirb
-		mirc		 	mird			mire			mirf
-		mirg		 	mirh			miri			mirj
-		takishruins  	takishruinsa  	paw 			nedaria
-	) ],
-	
-	god => [ qw(
-		abysmal			barindu			ferubi			ikkinz
-		inktuta			kodtaz			natimbi			mischiefplane
-		qinimi			qvic			riwwi			snpool
-		snlair			snplant			sncrematory		shadowrest
-		tacvi			fhalls			tipt			txevu
-		uqua			vxed			yxtta
-		
-	) ],
-	
-	oow => [ qw(
-		draniksscar    	dranik         dranikb          wallofslaughter
-		bloodfields    	ruinedcity     nobles           draniksscar
-		anguish       	catacombs      provinggrounds   causeway
-	) ],
+
+    loy => [ qw(
+        soldungc        cazicthule      dulak           gunthak
+        chardokb        hatesfury       nurga           hateplaneb
+        droga           nadox           torgiran        veksar
+    ) ],
+
+    ldon => [ qw(
+        guka            gukb            gukc            gukd
+        guke            gukf            gukg            gukh
+        mmca            mmcb            mmcc            mmcd
+        mmce            mmcf            mmcg            mmch
+        mmci            mmcj            ruja            rujb
+        rujc            rujd            ruje            rujf
+        rujg            rujh            ruji            rujj
+        mira            mirb            mirc            mird
+        mire            mirf            mirg            mirh
+        miri            mirj            takishruins     takishruinsa
+        paw             nedaria
+    ) ],
+
+    god => [ qw(
+        abysmal         barindu         ferubi          ikkinz
+        inktuta         kodtaz          natimbi         mischiefplane
+        qinimi          qvic            riwwi           snpool
+        snlair          snplant         sncrematory     shadowrest
+        tacvi           fhalls          tipt            txevu
+        uqua            vxed            yxtta
+    ) ],
+
+    oow => [ qw(
+        draniksscar     dranik          dranikb         wallofslaughter
+        bloodfields     ruinedcity      nobles          causeway
+        anguish         catacombs       provinggrounds  
+    ) ],
 );
 
 # 2) Era multipliers (tune for your server)
-#    hp      = HP
-#    melee   = min/max hit
-#    defense = AC / tankiness
-#    atk     = ATK + accuracy
-#    resist  = MR/FR/CR/DR/PR/Corruption
-#    spell   = spellscale / healscale
-#    mana    = max_mana
-#
 # Each era now has:
 #   trash => !$npc->IsRaidTarget() && !$npc->IsRareSpawn()
 #   named =>  $npc->IsRareSpawn()
@@ -148,7 +137,7 @@ my %ERA_SCALE = (
             mana    => 1.00,
         },
         named => {
-            hp      => 0.40,
+            hp      => 1.00,
             melee   => 0.40,
             defense => 0.50,
             atk     => 0.35,
@@ -157,7 +146,7 @@ my %ERA_SCALE = (
             mana    => 1.00,
         },
         raid  => {
-            hp      => 0.40,
+            hp      => 2.40,
             melee   => 0.40,
             defense => 0.50,
             atk     => 0.35,
@@ -411,9 +400,41 @@ my %ERA_SCALE = (
 # ---------------- NPC BLACKLIST ----------------
 # NPC type IDs that should NEVER be scaled.
 my %ERA_BLACKLIST_NPCID = (
-    # 282020 => 1,   # Training Dummy example
-    # 90001 => 1,
-    # 90002 => 1,
+    # 282020 => 1,   
+    # 90001  => 1,
+    # 90002  => 1,
+);
+
+# ---------------- ZONE VERSION BLACKLIST ----------------
+# Per-zone *version* blacklist.
+# Uses $zonesn and $instanceversion (0 = base zone).
+# Example:
+#   poknowledge => { 1 => 1 }  # don't touch version 1 of PoK (AoC instance, etc.)
+my %ERA_BLACKLIST_ZONEVER = (
+    # poknowledge => { 1 => 1 },
+    # hateplane   => { 1 => 1 },
+	
+);
+
+# ---------------- ROLE FILTERS ----------------
+# Control which roles get scaled by era.
+# If a role is 0 for a given era, scaling is entirely skipped for that NPC.
+#
+# Examples you can uncomment/adjust:
+#   classic => { trash => 1, named => 1, raid => 0 },   # no Classic raids touched
+#   god     => { trash => 0, named => 1, raid => 1 },   # only named+raids in GoD
+my %ERA_ROLE_FILTER = (
+    default => { trash => 1, named => 1, raid => 1 },
+
+    # classic => { trash => 1, named => 1, raid => 0 },
+    # kunark  => { trash => 1, named => 1, raid => 1 },
+    # velious => { trash => 1, named => 1, raid => 1 },
+    # luclin  => { trash => 1, named => 1, raid => 1 },
+    # pop     => { trash => 1, named => 1, raid => 1 },
+    # loy     => { trash => 1, named => 1, raid => 1 },
+    # ldon    => { trash => 1, named => 1, raid => 1 },
+    # god     => { trash => 1, named => 1, raid => 1 },
+    # oow     => { trash => 1, named => 1, raid => 1 },
 );
 
 # Fallback if zone/era not mapped
@@ -453,31 +474,59 @@ sub _era_classify_role {
 }
 
 # ==========================================================
-# PUBLIC: plugin::scale_npc_by_era([$npc, $zonesn])
+# PUBLIC: plugin::scale_npc_by_era([$npc, $zonesn, $zone_version])
 # ==========================================================
 sub plugin::scale_npc_by_era {
-    my ($npc, $zone) = @_;
+    my ($npc, $zone, $version) = @_;
 
     _era_build_zone_map() unless $ERA_SCALE_INITED;
 
     # Allow optional args or auto-grab from quest context
-    $npc  ||= plugin::val('npc');
-    $zone ||= plugin::val('zonesn');
+    $npc    ||= plugin::val('npc');
+    $zone   ||= plugin::val('zonesn');
+    $version = plugin::val('instanceversion') if !defined $version;
 
     return if !_era_should_scale_npc($npc);
 
-    my $zonesn = lc($zone // '');
+    my $zonesn        = lc($zone // '');
+    my $inst_version  = defined $version ? int($version) : 0;
 
-    my $era = exists $ZONE_ERA{$zonesn} ? $ZONE_ERA{$zonesn} : 'default';
+    # --- Zone-version blacklist ---
+    if (exists $ERA_BLACKLIST_ZONEVER{$zonesn}
+        && exists $ERA_BLACKLIST_ZONEVER{$zonesn}{$inst_version})
+    {
+        quest::debug(
+            sprintf(
+                "[EraScale] Skipping zone=%s ver=%d due to zone-version blacklist",
+                $zonesn, $inst_version
+            )
+        ) if $ERA_SCALE_DEBUG;
+        return;
+    }
 
+    my $era  = exists $ZONE_ERA{$zonesn} ? $ZONE_ERA{$zonesn} : 'default';
     my $role = _era_classify_role($npc);
+
+    # --- Role filter per era (trash/named/raid on/off) ---
+    my $rf = $ERA_ROLE_FILTER{$era} || $ERA_ROLE_FILTER{default} || { trash => 1, named => 1, raid => 1 };
+    if (!$rf->{$role}) {
+        quest::debug(
+            sprintf(
+                "[EraScale] Skipping npc_id=%d in zone=%s ver=%d era=%s role=%s due to role filter",
+                ($npc->GetNPCTypeID() || 0), $zonesn, $inst_version, $era, $role
+            )
+        ) if $ERA_SCALE_DEBUG;
+        return;
+    }
 
     my $prof;
     if ($era eq 'default') {
         $prof = \%DEFAULT_SCALE;
     } else {
         my $era_cfg = $ERA_SCALE{$era};
-        if (ref($era_cfg) eq 'HASH' && (exists $era_cfg->{trash} || exists $era_cfg->{named} || exists $era_cfg->{raid})) {
+        if (ref($era_cfg) eq 'HASH'
+            && (exists $era_cfg->{trash} || exists $era_cfg->{named} || exists $era_cfg->{raid}))
+        {
             # per-role config
             $prof = $era_cfg->{$role}
                  || $era_cfg->{trash}
@@ -491,8 +540,9 @@ sub plugin::scale_npc_by_era {
     if ($ERA_SCALE_DEBUG) {
         quest::debug(
             sprintf(
-                "[EraScale] map lookup: zone=%s -> era=%s role=%s (hp=%.2f melee=%.2f def=%.2f atk=%.2f resist=%.2f spell=%.2f mana=%.2f)",
-                $zonesn,
+                "[EraScale] map lookup: zone=%s ver=%d -> era=%s role=%s ".
+                "(hp=%.2f melee=%.2f def=%.2f atk=%.2f resist=%.2f spell=%.2f mana=%.2f)",
+                $zonesn, $inst_version,
                 $era,
                 $role,
                 $prof->{hp},      $prof->{melee},
@@ -503,7 +553,7 @@ sub plugin::scale_npc_by_era {
         );
     }
 
-    _era_apply_scale_profile($npc, $zonesn, $era, $role, $prof);
+    _era_apply_scale_profile($npc, $zonesn, $era, $role, $prof, $inst_version);
 }
 
 # ----------------------------------------------------------
@@ -536,7 +586,7 @@ sub _era_should_scale_npc {
 # INTERNAL: apply scale profile (full knobs)
 # ----------------------------------------------------------
 sub _era_apply_scale_profile {
-    my ($npc, $zone, $era, $role, $prof) = @_;
+    my ($npc, $zone, $era, $role, $prof, $version) = @_;
 
     my $hp_mult     = $prof->{hp}      // 1.0;
     my $melee_mult  = $prof->{melee}   // 1.0;
@@ -627,19 +677,19 @@ sub _era_apply_scale_profile {
     $npc->ModifyNPCStat("healscale",  $spellscale);
 
     $npc->Heal();  # refill HP to new max
-    # (mana will also be clamped inside ModifyNPCStat for max_mana)
 
     if ($ERA_SCALE_DEBUG) {
+        my $ver = defined $version ? int($version) : 0;
         quest::debug(
             sprintf(
-                "[EraScale] zone=%s era=%s role=%s ".
+                "[EraScale] zone=%s ver=%d era=%s role=%s ".
                 "hp %.0f->%.0f (x%.2f) ".
                 "min %.0f->%.0f (x%.2f) max %.0f->%.0f (x%.2f) ".
                 "ac %.0f->%.0f (x%.2f) atk %.0f->%.0f (x%.2f) ".
                 "mr %.0f->%.0f fr %.0f->%.0f cr %.0f->%.0f ".
                 "dr %.0f->%.0f pr %.0f->%.0f cor %.0f->%.0f (resist x%.2f) ".
                 "mana %.0f->%.0f (x%.2f) spell x%.2f",
-                $zone, $era, $role,
+                $zone, $ver, $era, $role,
                 $orig_hp,  $new_hp,  $hp_mult,
                 $orig_min, $new_min, $melee_mult,
                 $orig_max, $new_max, $melee_mult,
