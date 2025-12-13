@@ -416,6 +416,11 @@ my %ERA_BLACKLIST_ZONEVER = (
 	
 );
 
+our %ERA_GLOBAL_VERSION_BLACKLIST = (
+    # version => 1
+    # 1 => 1,    # example: skip ALL version 1 zones (custom zones, AoC instances, LDoN, etc)
+);
+
 # ---------------- ROLE FILTERS ----------------
 # Control which roles get scaled by era.
 # If a role is 0 for a given era, scaling is entirely skipped for that NPC.
@@ -491,18 +496,30 @@ sub plugin::scale_npc_by_era {
     my $zonesn        = lc($zone // '');
     my $inst_version  = defined $version ? int($version) : 0;
 
-    # --- Zone-version blacklist ---
-    if (exists $ERA_BLACKLIST_ZONEVER{$zonesn}
-        && exists $ERA_BLACKLIST_ZONEVER{$zonesn}{$inst_version})
-    {
-        quest::debug(
-            sprintf(
-                "[EraScale] Skipping zone=%s ver=%d due to zone-version blacklist",
-                $zonesn, $inst_version
-            )
-        ) if $ERA_SCALE_DEBUG;
-        return;
-    }
+	# --- Global version blacklist ---
+	if (exists $ERA_GLOBAL_VERSION_BLACKLIST{$inst_version}) {
+		quest::debug(
+			sprintf(
+				"[EraScale] Skipping zone=%s ver=%d due to GLOBAL version blacklist",
+				$zonesn, $inst_version
+			)
+		) if $ERA_SCALE_DEBUG;
+		return;
+	}
+
+	# --- Per-zone version blacklist ---
+	if (exists $ERA_BLACKLIST_ZONEVER{$zonesn}
+		&& exists $ERA_BLACKLIST_ZONEVER{$zonesn}{$inst_version})
+	{
+		quest::debug(
+			sprintf(
+				"[EraScale] Skipping zone=%s ver=%d due to zone-specific version blacklist",
+				$zonesn, $inst_version
+			)
+		) if $ERA_SCALE_DEBUG;
+		return;
+	}
+
 
     my $era  = exists $ZONE_ERA{$zonesn} ? $ZONE_ERA{$zonesn} : 'default';
     my $role = _era_classify_role($npc);
