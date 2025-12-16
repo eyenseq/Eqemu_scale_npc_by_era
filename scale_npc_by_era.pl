@@ -22,101 +22,154 @@ our $ERA_SCALE_DEBUG //= 0;
 # 1) Zones by era. Edit these lists for your server.
 my %ERA_ZONES = (
     classic => [ qw(
-        airplane        akanon          befallenb       beholder
-        butcher         cauldron        commonlands     blackburrow
-        commons         crushbone       eastkarana      ecommons
-        erudnext        erudnint        erudsxing       everfrost
-        steamfontmts    feerrott        feerrott2       felwithea
-        felwitheb       freeporteast    freeportwest    freporte
-        freportn        freportw        gfaydark        grobb
-        gukbottom       guktop          halas           highkeep
-        highpass        highpasshold    toxxulia        innothule
-        innothuleb      kaladima        kaladimb        kedge
-        kithicor        lakerathe       lavastorm       lfaydark
-        mistmoore       misty           mistythicket    najena
-        nektulos        neriaka         neriakb         neriakc
-        northkarana     northro         nro             oasis
-        oceanoftears    oggok           oot             paineel
-        befallen        permafrost      qcat            qey2hh1
-        qeynos          qeynos2         qeytoqrg        qrg
-        rathemtn        rivervale       runnyeye        soldunga
-        soldungb        tox		        soltemple       southkarana
-        southro         sro             steamfont       
-        
+        airplane akanon befallen befallenb beholder blackburrow butcher cauldron
+        commonlands commons crushbone eastkarana ecommons erudnext erudnint
+        erudsxing everfrost feerrott felwithea felwitheb freeporteast
+        freeportwest freporte freportn freportw gfaydark grobb
+        gukbottom guktop halas highkeep highpass highpasshold
+        innothule innothuleb kaladima kaladimb kedge kithicor
+        lakerathe lavastorm lfaydark mistmoore misty mistythicket
+        najena nektulos neriaka neriakb neriakc northkarana northro
+        nro oasis oceanoftears oggok oot paineel permafrost qcat
+        qey2hh1 qeynos qeynos2 qeytoqrg qrg rathemtn rivervale
+        runnyeye soldunga soldungb soltemple southkarana southro
+        sro steamfont steamfontmts tox
     ) ],
 
     kunark => [ qw(
-        burningwood     cabeast         cabwest         chardok
-        citymist        dalnir          dreadlands      firiona
-        frontiermtns    charasis        kaesora         karnor
-        kurn            lakeofillomen   warslikswood    sebilis
-        hole            skyfire         swampofnohope   veeshan
-        emeraldjungle   fieldofbone     overthere       timorous
-        trakanon
+        burningwood cabeast cabwest chardok charasis citymist dalnir
+        dreadlands emeraldjungle fieldofbone firiona frontiermtns
+        kaesora karnor kurn lakeofillomen overthere sebilis skyfire
+        swampofnohope timorous trakanon veeshan warslikswood
     ) ],
 
     velious => [ qw(
-        cobaltscar      crystal         necropolis      eastwastes
-        greatdivide     iceclad         icewell         kael
-        sleep           fearplane       growthplane     wakening
-        velketor        siren           skyshrine       stonebrunt
-        templeveeshan   warrens         westwastes      thurgadina
-        thurgadinb      frozenshadow
+        cobaltscar crystal eastwastes fearplane frozenshadow
+        greatdivide growthplane iceclad icewell kael necropolis
+        siren skyshrine sleep stonebrunt templeveeshan thurgadina
+        thurgadinb velketor wakening warrens westwastes
     ) ],
 
     luclin => [ qw(
-        acrylia         akheva          dawnshroud      echo
-        griegsend       grimling        hollowshade     jaggedpine
-        katta           mseru           letalis         netherbian
-        paludal         sseru           scarlet         shadeweaver
-        shadowhaven     sharvahl        ssratemple      tenebrous
-        bazaar          thedeep         fungusgrove     thegrey
-        maiden          nexus           twilight        umbral
-        vexthal
+        acrylia akheva bazaar dawnshroud echo fungusgrove
+        griegsend grimling hollowshade jaggedpine katta letalis
+        maiden mseru netherbian nexus paludal scarlet shadeweaver
+        shadowhaven sharvahl ssratemple sseru tenebrous thedeep
+        thegrey twilight umbral vexthal
     ) ],
 
     pop => [ qw(
-        pofire          potactics       poair           hohonora
-        hohonorb        ponightmare     nightmareb      podisease
-        poinnovation    poj             postorms        potimea
-        potimeb         potorment       potranquility   povalor
-        poeartha        poearthb        powater         codecay
-        solrotower      poknowledge     bothunder
+        bothunder codecay guildhall guildlobby hohonora hohonorb
+        nightmareb poair podisease poeartha poearthb pofire
+        poinnovation poj ponightmare poknowledge postorms
+        potactics potimea potimeb potorment potranquility
+        povalor powar powater solrotower
     ) ],
 
     loy => [ qw(
-        soldungc        cazicthule      dulak           gunthak
-        chardokb        hatesfury       nurga           hateplaneb
-        droga           nadox           torgiran        veksar
+        cazicthule chardokb droga dulak gunthak hateplaneb
+        hatesfury nadox nurga paw soldungc torgiran veksar
     ) ],
 
     ldon => [ qw(
-        guka            gukb            gukc            gukd
-        guke            gukf            gukg            gukh
-        mmca            mmcb            mmcc            mmcd
-        mmce            mmcf            mmcg            mmch
-        mmci            mmcj            ruja            rujb
-        rujc            rujd            ruje            rujf
-        rujg            rujh            ruji            rujj
-        mira            mirb            mirc            mird
-        mire            mirf            mirg            mirh
-        miri            mirj            takishruins     takishruinsa
-        paw             nedaria
+        guka gukb gukc gukd guke gukf gukg gukh mira mirb mirc
+        mird mire mirf mirg mirh miri mirj mmca mmcb mmcc mmcd
+        mmce mmcf mmcg mmch mmci mmcj nedaria ruja rujb rujc
+        rujd ruje rujf rujg rujh ruji rujj taka takishruins
+        takishruinsa
     ) ],
 
     god => [ qw(
-        abysmal         barindu         ferubi          ikkinz
-        inktuta         kodtaz          natimbi         mischiefplane
-        qinimi          qvic            riwwi           snpool
-        snlair          snplant         sncrematory     shadowrest
-        tacvi           fhalls          tipt            txevu
-        uqua            vxed            yxtta
+        abysmal barindu ferubi fhalls ikkinz inktuta kodtaz
+        mischiefplane natimbi qinimi qvic riwwi shadowrest
+        sncrematory snlair snplant snpool tacvi tipt txevu
+        uqua vxed yxtta
     ) ],
 
     oow => [ qw(
-        draniksscar     dranik          dranikb         wallofslaughter
-        bloodfields     ruinedcity      nobles          causeway
-        anguish         catacombs       provinggrounds  
+        anguish bloodfields causeway chambersa chambersb
+        chambersc chambersd chamberse chambersf
+        dranikcatacombsa dranikcatacombsb dranikcatacombsc
+        dranikhollowsa dranikhollowsb dranikhollowsc
+        draniksewersa draniksewersb draniksewersc draniksscar
+        nobles provinggrounds riftseekers ruinedcity
+        wallofslaughter
+    ) ],
+
+    don => [ qw(
+        broodlands delvea delveb stillmoona stillmoonb
+        thenest thundercrest
+    ) ],
+
+    dodh => [ qw(
+        corathus corathusa corathusb drachnidhive drachnidhivea
+        drachnidhiveb drachnidhivec dreadspire eastkorlach
+        eastkorlacha illsalin illsalina illsalinb illsalinc
+        shadowspine westkorlach westkorlacha westkorlachb
+        westkorlachc
+    ) ],
+
+    por => [ qw(
+        arcstone devastation devastationa elddar elddara
+        rage ragea relic theater theatera
+    ) ],
+
+    tss => [ qw(
+        ashengate crescent direwind frostcrypt icefall
+        mesa moors roost steppes stonehive
+        sunderock valdeholm vergalid
+    ) ],
+
+    tbs => [ qw(
+        atiiki barren barter blacksail buriedsea deadbone
+        jardelshook maidensgrave monkeyrock redfeather
+        shipmvm shipmvp shipmvu shippvu shipuvu silyssar
+        solteris suncrest thalassius zhisza
+    ) ],
+
+    sof => [ qw(
+        bloodmoon cryptofshade crystallos dragonscale
+        dragonscaleb guardian gyrospireb gyrospirez
+        hillsofshade lopingplains mansion mechanotus
+        shipworkshop steamfactory
+    ) ],
+
+    sod => [ qw(
+        bertoxtemple discord discordtower korascian
+        oceangreenhills oceangreenvillage oldblackburrow
+        oldbloodfield oldcommons olddranik oldfieldofbone
+        oldhighpass oldkaesoraa oldkaesorab oldkithicor
+        oldkurn precipiceofwar rathechamber
+        thevoida thevoidb thevoidc thevoidd thevoide
+        thevoidf thevoidg toskirakk
+    ) ],
+
+    uf => [ qw(
+        arthicrex brellsarena brellsrest brellstemple
+        convorteum coolingchamber foundation fungalforest
+        lichencreep pellucid shiningcity stonesnake
+        underquarry
+    ) ],
+
+    hot => [ qw(
+        alkabormare fallen feerrott2 housegarden
+        miragulmare morellcastle nektulosa
+        neighborhood somnium thulehouse1
+        thulehouse2 thulelibrary thuledream
+        well
+    ) ],
+
+    voa => [ qw(
+        arelis argath beastdomain cityofbronze
+        eastsepulcher pillarsalra resplendent
+        rubak sarithcity sepulcher westsepulcher
+        windsong
+    ) ],
+
+    rof => [ qw(
+        breedinggrounds chapterhouse crystalshard
+        eastwastesshard eviltree grelleth
+        kaelshard shardslanding xorbb
     ) ],
 );
 
@@ -137,7 +190,7 @@ my %ERA_SCALE = (
             mana    => 1.00,
         },
         named => {
-            hp      => 1.00,
+            hp      => 0.40,
             melee   => 0.40,
             defense => 0.50,
             atk     => 0.35,
@@ -146,7 +199,7 @@ my %ERA_SCALE = (
             mana    => 1.00,
         },
         raid  => {
-            hp      => 2.40,
+            hp      => 0.40,
             melee   => 0.40,
             defense => 0.50,
             atk     => 0.35,
@@ -347,7 +400,7 @@ my %ERA_SCALE = (
             mana    => 1.00,
         },
         named => {
-            hp      => 1.50,
+            hp      => 0.50,
             melee   => 0.50,
             defense => 0.50,
             atk     => 0.50,
@@ -356,7 +409,7 @@ my %ERA_SCALE = (
             mana    => 1.00,
         },
         raid  => {
-            hp      => 3.50,
+            hp      => 0.50,
             melee   => 0.50,
             defense => 0.50,
             atk     => 0.50,
@@ -367,6 +420,325 @@ my %ERA_SCALE = (
     },
 
     oow => {
+        trash => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        named => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        raid  => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+    },
+	don => {
+        trash => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        named => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        raid  => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+    },
+	dodh => {
+        trash => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        named => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        raid  => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+    },
+	por => {
+        trash => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        named => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        raid  => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+    },
+	tss => {
+        trash => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        named => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        raid  => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+    },
+	tbs => {
+        trash => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        named => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        raid  => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+    },
+	sof => {
+        trash => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        named => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        raid  => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+    },
+	sod => {
+        trash => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        named => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        raid  => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+    },
+	uf => {
+        trash => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        named => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        raid  => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+    },
+	hot => {
+        trash => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        named => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        raid  => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+    },
+	voa => {
+        trash => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        named => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+        raid  => {
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
+            mana    => 1.00,
+        },
+    },
+	rof => {
         trash => {
             hp      => 0.50,
             melee   => 0.50,
@@ -481,7 +853,7 @@ sub _era_classify_role {
 # ==========================================================
 # PUBLIC: plugin::scale_npc_by_era([$npc, $zonesn, $zone_version])
 # ==========================================================
-sub plugin::scale_npc_by_era {
+sub scale_npc_by_era {
     my ($npc, $zone, $version) = @_;
 
     _era_build_zone_map() unless $ERA_SCALE_INITED;
@@ -582,6 +954,9 @@ sub _era_should_scale_npc {
     return 0 if $npc->IsClient();   # skip players
     return 0 if $npc->IsPet();      # skip pets
     return 0 if $npc->IsCorpse();   # skip corpses
+	return 0 if $npc->IsBot();   # skip Bots
+	return 0 if $npc->IsAura();   # skip Aura
+	return 0 if $npc->IsMerc();   # skip Merc 
 
     # Skip merchants, bankers, etc.
     my $class = $npc->GetClass();
@@ -693,7 +1068,7 @@ sub _era_apply_scale_profile {
     $npc->ModifyNPCStat("spellscale", $spellscale);
     $npc->ModifyNPCStat("healscale",  $spellscale);
 
-    $npc->Heal();  # refill HP to new max
+    $npc->Heal() if !$npc->IsEngaged();
 
     if ($ERA_SCALE_DEBUG) {
         my $ver = defined $version ? int($version) : 0;
