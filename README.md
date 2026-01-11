@@ -1,183 +1,288 @@
-# Eqemu_scale_npc_by_era
-Scales NPCs up or down by "era" with NO DB changes.
+# scale_npc_by_era (EQEmu)
 
-# Era-Based NPC Scaling Plugin for EQEmu
+**Era-based NPC scaling with zero DB edits**, plus a **fast zone boot sweep** and **safe respawn/late-spawn scaling** using the Zone Controller.
 
-This plugin automatically scales NPC stats based on the **expansion era of the zone**.  
-It requires **no database changes** and applies adjustments globally whenever an NPC spawns.
-
-The plugin can scale:
-
-- HP  
-- Melee damage  
-- AC  
-- ATK / Accuracy  
-- Resists  
-- Spell & heal power  
-
-Each expansion era (Classic → Kunark → Velious → Luclin → PoP → etc.) has simple tuning knobs you can edit.
+This plugin scales NPC stats when they appear in a zone, based on the zone’s “era” (Classic → Kunark → Velious → …) as defined by your zone lists.
 
 ---
 
-## 📦 Installation
+## What this plugin does
 
-Place the plugin file here:
+### ✅ Core scaling (per NPC)
+For each NPC, the plugin:
+- figures out the zone era from `%ERA_ZONES`
+- classifies the NPC role: `trash`, `named`, or `raid`
+- applies your per-era/per-role multipliers from `%ERA_SCALE`
+- respects all skip rules (clients/pets/corpses/bots/mercs/aura, merchants/bankers, low HP props, blacklists)
+
+### ✅ Fast “fresh zone” scaling (boot sweep)
+On zone startup, the Zone Controller can do a **single sweep** through all NPCs and scale them immediately.
+
+### ✅ Respawn / late-spawn scaling
+When an NPC respawns (or spawns later), `global_npc.pl` signals the Zone Controller with the NPC **entity ID** so the controller can safely resolve it to an NPC object and scale it.
+
+---
+
+## What it scales
+
+This plugin can scale:
+
+- **HP** (`max_hp`)
+- **Melee damage** (`min_hit`, `max_hit`)
+- **AC** (`ac`)
+- **ATK / Accuracy** (`atk`, `accuracy`)
+- **Resists** (`mr`, `fr`, `cr`, `dr`, `pr`, `cor`)
+- **Spell & heal scaling** (`spellscale`, `healscale`)
+- **Mana** (`max_mana`)
+
+It also heals the NPC after scaling if it is not engaged.
+
+---
+
+## Install
+
+Place the plugin here:
+
+```
 quests/plugins/scale_npc_by_era.pl
+```
 
+Then set up the wiring (below).
 
-# There are TWO DIFFERENT methods. One using global_npc.pl the other using zonecontroller.pl. Use ONE NOT BOTH.
+---
 
-**`quests/global/global_npc.pl`**
+## REQUIRED WIRING (this version)
+
+This plugin version is designed to run in **Zone Controller mode**:
+
+- Zone Controller handles **boot sweep** and **signal scaling**
+- global_npc handles **respawn / late spawns** by signaling Zone Controller
+
+> Use this wiring. Don’t also run a second era-scaling system in parallel.
+
+---
+
+## 1) Zone Controller script (The built in Zone Controller ID in every zone is 10)
+
+Create or edit:
+
+```
+quests/global/10.pl
+```
+
+Add exactly this:
+
+```perl
+# quests/global/10.pl
+
+sub EVENT_SPAWN {
+    # Starts the boot sweep timer (fast scaling for fresh zones)
+    plugin::era_zc_on_spawn($zonesn, $instanceversion);
+}
+
+sub EVENT_TIMER {
+    # Runs the boot sweep when "__era_boot" fires
+    plugin::era_zc_on_timer($timer, $zonesn, $instanceversion);
+}
+
+sub EVENT_SIGNAL {
+    # Receives an entity id via signal and scales that NPC on-demand
+    plugin::era_zc_on_signal($signal, $zonesn, $instanceversion);
+}
+```
+
+---
+
+## 2) global_npc spawn hook (respawns / late spawns)
+
+Edit:
+
+```
+quests/global/global_npc.pl
+```
+
+In `EVENT_SPAWN`, add:
 
 ```perl
 sub EVENT_SPAWN {
-    plugin::scale_npc_by_era();
+    plugin::era_npc_on_spawn($npc, $zonesn, $instanceversion);
 }
 ```
-That's all you need for the plugin to begin scaling NPCs by zone era.
 
-**`quests/global/zone_controller.pl`**
+That’s it.
+
+What this does:
+- Every NPC spawn calls `era_npc_on_spawn`
+- The plugin checks if it **should scale**
+- If needed, it `signalwith(10, $eid, 200)` so the controller scales it safely
+
+---
+
+## How it works (in plain English)
+
+### Fresh zone boot
+1. Zone controller spawns
+2. Plugin sets a short timer (`__era_boot`, default 1 second)
+3. When it fires, it loops `GetNPCList()` and scales everything once
+
+### Later spawns / respawns
+1. `global_npc.pl` fires EVENT_SPAWN for the NPC
+2. `era_npc_on_spawn()` checks skip rules + de-dupes
+3. It signals NPC type **10** (your controller) with the NPC **entity id**
+4. `era_zc_on_signal()` resolves entity id to a real NPC object and scales it
+
+---
+
+## Tuning difficulty
+
+### 1) Zone → Era mapping (`%ERA_ZONES`)
+Edit the zone lists at the top:
 
 ```perl
-
-our $ZC_ERA_DEBUG = 0; # zone-controller level debug (separate from plugin’s)
-
-sub EVENT_SPAWN_ZONE {
-    # This fires for EVERY NPC spawn in the zone
-
-    # $spawned_entity_id and $spawned_npc_id are set by the engine
-    my $ent_id = $spawned_entity_id;
-    my $npc_id = $spawned_npc_id;
-
-    my $mob = $entity_list->GetMobID($ent_id);
-    return if !$mob;
-    return if !$mob->IsNPC();          # safety
-
-    my $npc = $mob->CastToNPC();
-
-    # Let the plugin handle era, trash/named/raid, blacklist, etc.
-    plugin::scale_npc_by_era($npc, $zonesn);
-
-    if ($ZC_ERA_DEBUG) {
-        quest::debug(
-            sprintf(
-                "[EraScale-ZC] EVENT_SPAWN_ZONE: scaled npc_type_id=%d ent_id=%d in %s",
-                $npc_id, $ent_id, $zonesn
-            )
-        );
-    }
-}
+my %ERA_ZONES = (
+  classic => [ qw(qeynos qeynos2 freeporte ... ) ],
+  kunark  => [ qw(fieldofbone kurn sebilis ... ) ],
+  ...
+);
 ```
 
-## 🎛️ Adjusting Difficulty
+If a zone isn’t listed, it becomes `default` (no scaling unless you change `%DEFAULT_SCALE`).
 
-Inside scale_npc_by_era.pl, each era has a configuration block:
+---
+
+### 2) Era multipliers (`%ERA_SCALE`)
+Each era has per-role blocks:
+
+- `trash` = not raid target and not rare spawn
+- `named` = rare spawn
+- `raid`  = raid target
+
+Example:
+
 ```perl
 classic => {
-        trash => {
-            hp      => 0.40,
-            melee   => 0.40,
-            defense => 0.50,
-            atk     => 0.35,
-            resist  => 0.50,
-            spell   => 0.50,
-            mana    => 1.00,
-        },
-        named => {
-            hp      => 0.40,
-            melee   => 0.40,
-            defense => 0.50,
-            atk     => 0.35,
-            resist  => 0.50,
-            spell   => 0.50,
-            mana    => 1.00,
-        },
-        raid  => {
-            hp      => 0.40,
-            melee   => 0.40,
-            defense => 0.50,
-            atk     => 0.35,
-            resist  => 0.50,
-            spell   => 0.50,
-            mana    => 1.00,
-        },
-    },
+  trash => { hp=>0.50, melee=>0.50, defense=>0.50, atk=>0.50, resist=>0.50, spell=>0.50, mana=>1.00 },
+  named => { ... },
+  raid  => { ... },
+},
 ```
 
-Where:
+Meaning:
+- **Lower** numbers = easier
+- **Higher** numbers = harder
 
-Lower numbers = easier
+Notes:
+- `defense` is used for AC scaling
+- `atk` is used for ATK and Accuracy scaling
+- `spell` also influences resists if `resist` is not set (fallback logic exists)
 
-Higher numbers = harder
+---
 
-You can fine-tune the difficulty progression across eras easily by editing these values.
+## Filters / skipping
 
-## 🚫 NPC Blacklist (Never Scale These)
+### NPC blacklist (never scale)
+Add NPCTypeIDs here:
 
-If there are NPCs that should not be affected (e.g. bosses, special encounters), add their NPCTypeID here:
 ```perl
 my %ERA_BLACKLIST_NPCID = (
-    # 28202 => 1,   # Example: NPC
-    # 90001 => 1,  # Example: Boss NPC
+  10      => 1,  # zone_controller type
+  2100000 => 1,  # your custom npc
 );
 ```
 
-Any NPCTypeID listed will spawn unscaled.
-## 🚫 ZONE VERSION BLACKLIST
-
-If there is a zone that should not be affected (e.g. permafrost version x), add the zonesn and version here:
+### Zone blacklist (all versions)
 ```perl
-#   poknowledge => { 1 => 1 }  # don't touch version 1 of PoK 
+my %ERA_BLACKLIST_ZONE = (
+  poknowledge => 1,
+);
+```
+
+### Per-zone version blacklist
+```perl
 my %ERA_BLACKLIST_ZONEVER = (
-    # poknowledge => { 1 => 1 },
-    # hateplane   => { 1 => 1 },
-);
-```
-## 🚫 Role filter
-
-Changes how roles are scaled
-```perl
-#   classic => { trash => 1, named => 1, raid => 0 },   # no Classic raids touched
-#   god     => { trash => 0, named => 1, raid => 1 },   # only named+raids in GoD
-my %ERA_ROLE_FILTER = (
-    default => { trash => 1, named => 1, raid => 1 },
-
-    # classic => { trash => 1, named => 1, raid => 0 },
-    # kunark  => { trash => 1, named => 1, raid => 1 },
-    # velious => { trash => 1, named => 1, raid => 1 },
-    # luclin  => { trash => 1, named => 1, raid => 1 },
-    # pop     => { trash => 1, named => 1, raid => 1 },
-    # loy     => { trash => 1, named => 1, raid => 1 },
-    # ldon    => { trash => 1, named => 1, raid => 1 },
-    # god     => { trash => 1, named => 1, raid => 1 },
-    # oow     => { trash => 1, named => 1, raid => 1 },
+  # poknowledge => { 1 => 1 },
 );
 ```
 
-## 🚫 Version Filter
+### Global version blacklist
+This skips all zones of a given instance version:
 
 ```perl
 our %ERA_GLOBAL_VERSION_BLACKLIST = (
-    # version => 1
-    # 1 => 1,    # example: skip ALL version 1 zones (custom zones, AoC instances, LDoN, etc)
+  2 => 1,
 );
 ```
 
-## 🛠️ Debugging (Optional)
+---
 
-Enable debug output at the top of the plugin:
+## Role filters (enable/disable scaling by role per era)
+
+If you want to disable scaling for certain roles in certain eras:
+
+```perl
+my %ERA_ROLE_FILTER = (
+  default => { trash => 1, named => 1, raid => 1 },
+
+  # classic => { trash => 1, named => 1, raid => 0 },  # don’t scale classic raids
+);
+```
+
+If role is `0`, scaling is skipped completely for that NPC.
+
+---
+
+## Debugging
+
+### Plugin debug (main)
+At the top of the plugin:
+
 ```perl
 our $ERA_SCALE_DEBUG //= 1;
 ```
 
-This will print helpful information when NPCs spawn, such as:
+This prints:
+- zone → era → role
+- chosen multipliers
+- original → new stats
 
-Detected zone → era
+### Zone-controller debug (optional)
+Inside the plugin there’s a separate controller debug flag:
 
-Original and scaled stats
+```perl
+our $ERA_ZC_DEBUG //= 0;
+```
 
-Applied multipliers
+Set it to `1` if you want controller-specific logs (boot sweep counts and signal scaling messages).
 
-Useful for verifying your configuration.
+---
 
+## Common issues
+
+### “Fresh zone scaling is slow”
+Use the wiring in this README (Zone Controller mode). The boot sweep is the fast path.
+
+### “NPC doesn’t scale on respawn”
+Make sure `global_npc.pl` calls:
+
+```perl
+plugin::era_npc_on_spawn($npc, $zonesn, $instanceversion);
+```
+
+---
+
+## Files touched
+
+- `quests/plugins/scale_npc_by_era.pl`  (this plugin)
+- `quests/global/zone_controller.pl`    (3 small event handlers)
+- `quests/global/global_npc.pl`         (1 line inside EVENT_SPAWN)
+
+---
+
+## Minimal “works now” checklist
+
+- [ ] Plugin placed in `quests/plugins/scale_npc_by_era.pl`
+- [ ] `10.pl` has EVENT_SPAWN / EVENT_TIMER / EVENT_SIGNAL wired to the plugin
+- [ ] `global_npc.pl` calls `plugin::era_npc_on_spawn(...)` in EVENT_SPAWN
+- [ ] NPCTypeID 10 is blacklisted (already is in your plugin)
+- [ ] Debug enabled while testing (`$ERA_SCALE_DEBUG = 1`)
 
