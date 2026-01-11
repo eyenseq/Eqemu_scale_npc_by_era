@@ -16,7 +16,7 @@
 package plugin;
 
 # Toggle for chatty debug
-our $ERA_SCALE_DEBUG //= 0;
+our $ERA_SCALE_DEBUG //= 1;
 
 # ---------------- ERA CONFIG ----------------
 # 1) Zones by era. Edit these lists for your server.
@@ -181,28 +181,28 @@ my %ERA_ZONES = (
 my %ERA_SCALE = (
     classic => {
         trash => {
-            hp      => 0.40,
-            melee   => 0.40,
+            hp      => 0.50,
+            melee   => 0.50,
             defense => 0.50,
-            atk     => 0.35,
+            atk     => 0.50,
             resist  => 0.50,
             spell   => 0.50,
             mana    => 1.00,
         },
         named => {
-            hp      => 0.40,
-            melee   => 0.40,
+            hp      => 0.50,
+            melee   => 0.50,
             defense => 0.50,
-            atk     => 0.35,
+            atk     => 0.50,
             resist  => 0.50,
             spell   => 0.50,
             mana    => 1.00,
         },
         raid  => {
-            hp      => 0.40,
-            melee   => 0.40,
+            hp      => 0.50,
+            melee   => 0.50,
             defense => 0.50,
-            atk     => 0.35,
+            atk     => 0.50,
             resist  => 0.50,
             spell   => 0.50,
             mana    => 1.00,
@@ -211,90 +211,90 @@ my %ERA_SCALE = (
 
     kunark => {
         trash => {
-            hp      => 0.55,
-            melee   => 0.55,
-            defense => 0.65,
-            atk     => 0.55,
-            resist  => 0.60,
-            spell   => 0.65,
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
             mana    => 1.00,
         },
         named => {
-            hp      => 0.55,
-            melee   => 0.55,
-            defense => 0.65,
-            atk     => 0.55,
-            resist  => 0.60,
-            spell   => 0.65,
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
             mana    => 1.00,
         },
         raid  => {
-            hp      => 0.55,
-            melee   => 0.55,
-            defense => 0.65,
-            atk     => 0.55,
-            resist  => 0.60,
-            spell   => 0.65,
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
             mana    => 1.00,
         },
     },
 
     velious => {
         trash => {
-            hp      => 0.70,
-            melee   => 0.70,
-            defense => 0.80,
-            atk     => 0.70,
-            resist  => 0.75,
-            spell   => 0.80,
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
             mana    => 1.00,
         },
         named => {
-            hp      => 0.70,
-            melee   => 0.70,
-            defense => 0.80,
-            atk     => 0.70,
-            resist  => 0.75,
-            spell   => 0.80,
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
             mana    => 1.00,
         },
         raid  => {
-            hp      => 0.70,
-            melee   => 0.70,
-            defense => 0.80,
-            atk     => 0.70,
-            resist  => 0.75,
-            spell   => 0.80,
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
             mana    => 1.00,
         },
     },
 
     luclin => {
         trash => {
-            hp      => 0.85,
-            melee   => 0.85,
-            defense => 0.90,
-            atk     => 0.85,
-            resist  => 0.90,
-            spell   => 0.95,
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
             mana    => 1.00,
         },
         named => {
-            hp      => 0.85,
-            melee   => 0.85,
-            defense => 0.90,
-            atk     => 0.85,
-            resist  => 0.90,
-            spell   => 0.95,
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
             mana    => 1.00,
         },
         raid  => {
-            hp      => 0.85,
-            melee   => 0.85,
-            defense => 0.90,
-            atk     => 0.85,
-            resist  => 0.90,
-            spell   => 0.95,
+            hp      => 0.50,
+            melee   => 0.50,
+            defense => 0.50,
+            atk     => 0.50,
+            resist  => 0.50,
+            spell   => 0.50,
             mana    => 1.00,
         },
     },
@@ -772,7 +772,8 @@ my %ERA_SCALE = (
 # ---------------- NPC BLACKLIST ----------------
 # NPC type IDs that should NEVER be scaled.
 my %ERA_BLACKLIST_NPCID = (
-    # 282020 => 1,   
+	10 => 1,
+    2100000 => 1,   
     # 90001  => 1,
     # 90002  => 1,
 );
@@ -788,9 +789,17 @@ my %ERA_BLACKLIST_ZONEVER = (
 	
 );
 
+# ---------------- ZONE BLACKLIST (ANY VERSION) ----------------
+# Zones that should NEVER be scaled (all versions)
+# Uses $zonesn only (zone short name)
+my %ERA_BLACKLIST_ZONE = (
+    poknowledge => 1,
+	# riftseekers      => 1,
+);
+
 our %ERA_GLOBAL_VERSION_BLACKLIST = (
     # version => 1
-    # 1 => 1,    # example: skip ALL version 1 zones (custom zones, AoC instances, LDoN, etc)
+    2 => 1,    # example: skip ALL version 2 zones (custom zones, AoC instances, LDoN, etc)
 );
 
 # ---------------- ROLE FILTERS ----------------
@@ -845,8 +854,26 @@ sub _era_build_zone_map {
 # -------- role classifier: trash / named / raid ----------
 sub _era_classify_role {
     my ($npc) = @_;
-    return 'raid'  if $npc->IsRaidTarget();
-    return 'named' if $npc->IsRareSpawn();
+    return 'trash' if !$npc;
+
+    my $is_raid  = 0;
+    my $is_named = 0;
+
+    if ($npc->can('IsRaidTarget')) {
+        $is_raid = $npc->IsRaidTarget() ? 1 : 0;
+    }
+
+    if (!$is_raid) {
+        if ($npc->can('IsRareSpawn')) {
+            $is_named = $npc->IsRareSpawn() ? 1 : 0;
+        } else {
+            my $nm = lc($npc->GetCleanName() // "");
+            $is_named = ($nm ne "" && $nm !~ /^(a|an|the)\s+/) ? 1 : 0;
+        }
+    }
+
+    return 'raid'  if $is_raid;
+    return 'named' if $is_named;
     return 'trash';
 }
 
@@ -867,6 +894,17 @@ sub scale_npc_by_era {
 
     my $zonesn        = lc($zone // '');
     my $inst_version  = defined $version ? int($version) : 0;
+
+	# --- Zone blacklist (any version) ---
+    if (exists $ERA_BLACKLIST_ZONE{$zonesn}) {
+        quest::debug(
+            sprintf(
+                "[EraScale] Skipping zone=%s ver=%d due to ZONE blacklist (all versions)",
+                $zonesn, $inst_version
+            )
+        ) if $ERA_SCALE_DEBUG;
+        return;
+    }
 
 	# --- Global version blacklist ---
 	if (exists $ERA_GLOBAL_VERSION_BLACKLIST{$inst_version}) {
@@ -1100,4 +1138,193 @@ sub _era_apply_scale_profile {
     }
 }
 
+
+# ==========================================================
+# Zone Controller Fast Bootstrap Helpers
+#   - Fast "boot sweep" scaling (no per-NPC signals required)
+#   - Optional on-demand scaling for late spawns
+#
+# Usage (in quests/global/zone_controller.pl or quests/global/10.pl):
+#   sub EVENT_SPAWN  { plugin::era_zc_on_spawn($zonesn, $instanceversion); }
+#   sub EVENT_TIMER  { plugin::era_zc_on_timer($timer, $zonesn, $instanceversion); }
+#   sub EVENT_SIGNAL { plugin::era_zc_on_signal($signal, $zonesn, $instanceversion); }
+#
+# Optional (in global_npc.pl) for late spawns:
+#   plugin::era_scale_maybe_npc($npc, $zonesn, $instanceversion);
+# ==========================================================
+
+our $ERA_ZC_DEBUG //= 0;
+our %ERA_ZC_DONE;     # key => 1 (scaled)
+our %ERA_ZC_OPTS;     # zonesn:ver => { ... }
+
+sub _era_zc_key {
+    my ($eid, $zonesn, $ver) = @_;
+    $zonesn = lc($zonesn // '');
+    $ver = defined $ver ? int($ver) : 0;
+    return join(':', $zonesn, $ver, int($eid));
+}
+
+sub _era_get_entity_list {
+    # In plugin package, $entity_list isn't in scope; fetch via plugin::val or main::
+    my $el = plugin::val('entity_list');
+    $el ||= $::entity_list;
+    $el ||= $main::entity_list;
+    return $el;
+}
+
+
+sub era_zc_on_spawn {
+    my ($zonesn, $ver, %opts) = @_;
+    $zonesn = lc($zonesn // plugin::val('zonesn') // '');
+    $ver    = defined $ver ? int($ver) : int(plugin::val('instanceversion') // 0);
+
+    # Defaults tuned for speed
+    $opts{boot_delay_s}   = 1   if !exists $opts{boot_delay_s};
+    $opts{scale_level_ge} = 1   if !exists $opts{scale_level_ge};  # set to 5 if you want to skip lowbies
+    $opts{skip_named_only}= 0   if !exists $opts{skip_named_only}; # keep 0 for full sweep
+
+    $ERA_ZC_OPTS{"$zonesn:$ver"} = \%opts;
+
+    quest::debug("[era_zc] spawn zonesn=$zonesn ver=$ver boot in $opts{boot_delay_s}s") if $ERA_ZC_DEBUG;
+    quest::settimer("__era_boot", $opts{boot_delay_s});
+}
+
+sub era_zc_on_timer {
+    my ($t, $zonesn, $ver) = @_;
+    $t = $t // '';
+    return if $t ne "__era_boot";
+
+    $zonesn = lc($zonesn // plugin::val('zonesn') // '');
+    $ver    = defined $ver ? int($ver) : int(plugin::val('instanceversion') // 0);
+
+    my $opts = $ERA_ZC_OPTS{"$zonesn:$ver"} || {};
+    my $minlvl = int($opts->{scale_level_ge} // 1);
+
+    quest::stoptimer("__era_boot");
+
+    my $el = _era_get_entity_list();
+    return if !$el;
+
+    my @npcs = $el->GetNPCList();
+    my $count = 0;
+
+    foreach my $n (@npcs) {
+        next if !$n;
+
+        # Skip the controller itself (varies by build)
+        if ($n->can('GetCleanName')) {
+            my $nm = lc($n->GetCleanName() // "");
+            next if $nm eq "zone_controller" || $nm =~ /zone controller/;
+        }
+        if ($n->can('GetNPCTypeID')) {
+            next if int($n->GetNPCTypeID()) == 10; # your controller type
+        }
+
+        next if $n->can('GetLevel') && int($n->GetLevel()) < $minlvl;
+
+        my $eid = $n->GetID();
+        my $k = _era_zc_key($eid, $zonesn, $ver);
+        next if $ERA_ZC_DONE{$k};
+
+        # Scale immediately (fastest)
+        plugin::scale_npc_by_era($n, $zonesn, $ver);
+
+        $ERA_ZC_DONE{$k} = 1;
+        $count++;
+    }
+
+    quest::debug("[era_zc] boot sweep scaled=$count zonesn=$zonesn ver=$ver") if $ERA_ZC_DEBUG;
+}
+
+sub era_zc_on_signal {
+    my ($sig, $zonesn, $ver) = @_;
+    my $eid = int($sig // 0);
+    return if $eid <= 0;
+
+    $zonesn = lc($zonesn // plugin::val('zonesn') // '');
+    $ver    = defined $ver ? int($ver) : int(plugin::val('instanceversion') // 0);
+
+    my $k = _era_zc_key($eid, $zonesn, $ver);
+
+    my $el = _era_get_entity_list();
+    return if !$el;
+
+    # If marked done, verify entity still exists (entity IDs can be reused)
+    if ($ERA_ZC_DONE{$k}) {
+        my $chk = $el->GetMobID($eid);
+        if (!$chk) {
+            delete $ERA_ZC_DONE{$k};
+        } else {
+            delete $ERA_ZC_QUEUED{$k};
+            return;
+        }
+    }
+
+    # Resolve to an NPC object (avoid Mob lacking NPC methods)
+    my $m;
+    $m = $el->GetNPCByID($eid) if $el->can('GetNPCByID');
+
+    if (!$m) {
+        $m = $el->GetMobID($eid);
+        return if !$m;
+        return if !$m->IsNPC();
+        $m = $m->CastToNPC() if $m->can('CastToNPC');
+    }
+
+    return if !$m;
+
+    # Hard guard: if we still don't have NPC stat methods, skip
+    if (!$m->can('GetMinDMG')) {
+        quest::debug("[EraScale] signal eid=$eid resolved to non-NPC-stat object; skipping")
+            if $ERA_SCALE_DEBUG;
+        delete $ERA_ZC_QUEUED{$k};
+        return;
+    }
+
+    plugin::scale_npc_by_era($m, $zonesn, $ver);
+
+    $ERA_ZC_DONE{$k} = 1;
+    delete $ERA_ZC_QUEUED{$k};
+
+    quest::debug("[era_zc] signal-scaled eid=$eid zonesn=$zonesn ver=$ver") if $ERA_ZC_DEBUG;
+}
+
+# ==========================================================
+# Respawn / late-spawn hook (call from global_npc EVENT_SPAWN)
+#   - Boot sweep handles "fresh zone fast"
+#   - This handles respawns/late spawns safely
+#
+# Usage (global_npc.pl):
+#   sub EVENT_SPAWN { plugin::era_npc_on_spawn($npc, $zonesn, $instanceversion); }
+# ==========================================================
+our %ERA_ZC_QUEUED;  # zonesn:ver:eid => 1 (signal already queued)
+
+sub era_npc_on_spawn {
+    my ($npc, $zonesn, $ver) = @_;
+    return if !$npc;
+
+    $zonesn = lc($zonesn // plugin::val('zonesn') // '');
+    $ver    = defined $ver ? int($ver) : int(plugin::val('instanceversion') // 0);
+
+    # Respect all skip rules
+    return if !_era_should_scale_npc($npc);
+
+    # If boot sweep already scaled this exact entity id, do nothing
+    my $eid = int($npc->GetID() || 0);
+    return if $eid <= 0;
+
+    my $k = _era_zc_key($eid, $zonesn, $ver);
+    return if $ERA_ZC_DONE{$k};
+
+    # De-dupe: don't queue multiple signals for same eid in same tick window
+    return if $ERA_ZC_QUEUED{$k};
+    $ERA_ZC_QUEUED{$k} = 1;
+
+    # Small delay avoids "Mob handle not fully NPC yet" edge cases on some builds
+    my $wait_ms = 200;
+    quest::signalwith(10, $eid, $wait_ms);
+
+    quest::debug("[EraScale] queued respawn scale: zone=$zonesn ver=$ver eid=$eid wait_ms=$wait_ms")
+        if $ERA_SCALE_DEBUG;
+}
 1;
